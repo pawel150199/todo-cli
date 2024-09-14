@@ -1,0 +1,27 @@
+---
+name: Build binary of todo app
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.x
+      
+      - name: Display go version
+        run: |
+          go version
+        
+      - name: Build application
+        run: |
+          go build src/main.go src/todo.go src/storage.go src/command.go
+          mv main mv todo
+          ./todo --help
