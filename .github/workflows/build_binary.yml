@@ -23,5 +23,5 @@ jobs:
       - name: Build application
         run: |
           go build src/main.go src/todo.go src/storage.go src/command.go
-          mv main mv todo
+          mv main todo
           ./todo --help
