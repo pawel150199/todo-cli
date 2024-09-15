@@ -29,19 +29,19 @@ jobs:
       - name: Upload binary file
         uses: actions/upload-artifact@v3
         with:
-          name: todo-binary
+          name: todo-v${{ github.run_number }}
           path: ./todo
   
   release:
     name: Release project
-    permissions: write-all
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: todo-binary
+          name: todo-v${{ github.run_number }}
+
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -50,3 +50,16 @@ jobs:
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number}}
+      
+      - name: List directory
+        run: |
+          ls -latrh
+      
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./todo
+          asset_name: todo-v${{ github.run_number }}
