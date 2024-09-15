@@ -40,7 +40,12 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: todo-v${{ github.run_number }}
+          name: todo
+      
+      - name: Archive site content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: todo.zip
 
       - name: Create release
         id: create_release
@@ -62,5 +67,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./todo
-          asset_name: todo-v${{ github.run_number }}
+          asset_name: todo
           asset_content_type: application/zip
