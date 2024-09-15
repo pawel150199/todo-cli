@@ -1,11 +1,26 @@
 package main
 
+import (
+	"fmt"
+	"os"
+)
+
 func main() {
 	todos := Todos{}
 	storage := NewStorage[Todos]("todos.json")
-	storage.Load(&todos)
+	err := storage.Load(&todos)
+
+	if err != nil {
+		fmt.Println("Error, storage load have not been successfuly run!")
+		os.Exit(1)
+	}
 
 	CmdFlags := NewCmdFlags()
 	CmdFlags.Execute(&todos)
-	storage.Save(todos)
+	err = storage.Save(todos)
+
+	if err != nil {
+		fmt.Println("Error, storage save have not been successfuly run!")
+		os.Exit(1)
+	}
 }

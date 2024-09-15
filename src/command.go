@@ -34,29 +34,49 @@ func (cf *CmdFlags) Execute(todos *Todos) {
 	switch {
 	case cf.List:
 		todos.print()
+
 	case cf.Add != "":
 		todos.add(cf.Add)
+
 	case cf.Edit != "":
 		parts := strings.SplitN(cf.Edit, ":", 2)
 
 		if len(parts) != 2 {
-			fmt.Println("error, invalid format for edit. Please use id:new_title")
+			fmt.Println("Error, invalid format for edit. Please use id:new_title!")
 			os.Exit(1)
 		}
 
 		index, err := strconv.Atoi(parts[0])
 
 		if err != nil {
-			fmt.Println("Error: invalid index for edit")
+			fmt.Println("Error: invalid index for edit!")
 			os.Exit(1)
 		}
 
-		todos.edit(index, parts[1])
+		err = todos.edit(index, parts[1])
+
+		if err != nil {
+			fmt.Println("Error, edit operation have not been successfuly run!")
+			os.Exit(1)
+		}
+
 	case cf.Toggle != -1:
-		todos.toggle(cf.Toggle)
+		err := todos.toggle(cf.Toggle)
+
+		if err != nil {
+			fmt.Println("Error, toggle operation have not been successfuly run!")
+			os.Exit(1)
+		}
+
 	case cf.Del != -1:
-		todos.delete(cf.Del)
+		err := todos.delete(cf.Del)
+
+		if err != nil {
+			fmt.Println("Error, toggle operation have not been successfuly run!")
+			os.Exit(1)
+		}
+
 	default:
-		fmt.Println("Invalid command")
+		fmt.Println("Invalid command!")
 	}
 }
