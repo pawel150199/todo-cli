@@ -3,13 +3,11 @@ name: List golang code
 
 on:
   push:
-    branches: ["master"]
-    paths:
-      - '**.go'
+    branches:
+      - '*'
   pull_request:
-    branches: ["master"]
-    paths:
-      - '**.go'
+    branches:
+      - master
 
 jobs:
   ci:
