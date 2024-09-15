@@ -29,3 +29,4 @@ jobs:
         with:
           version: v1.56
           args: --timeout 3m --config .golangci.yml
+
