@@ -21,9 +21,11 @@ jobs:
           go version
         
       - name: Build application
+        env:
+          GOOS=linux
+          GOARCH=arm64
         run: |
-          go build src/main.go src/todo.go src/storage.go src/command.go
-          mv main todo
+          go build  -o todo src/main.go src/todo.go src/storage.go src/command.go
           ./todo --help
       
       - name: Upload binary file
