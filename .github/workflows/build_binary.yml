@@ -45,7 +45,7 @@ jobs:
       - name: Archive site content
         uses: thedoctor0/zip-release@master
         with:
-          filename: todo.zip
+          filename: todo
 
       - name: Create release
         id: create_release
