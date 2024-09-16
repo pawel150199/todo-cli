@@ -20,33 +20,79 @@ jobs:
         run: |
           go version
         
-      - name: Build application
+      - name: Build application linux arm64
         env:
           GOOS: linux
           GOARCH: arm64
         run: |
-          go build  -o todo src/main.go src/todo.go src/storage.go src/command.go
+          go build  -o todo_arm64 src/main.go src/todo.go src/storage.go src/command.go
       
-      - name: Upload binary file
+      - name: Build application linux amd64
+        env:
+          GOOS: linux
+          GOARCH: amd64
+        run: |
+          go build  -o todo_amd64 src/main.go src/todo.go src/storage.go src/command.go
+      
+      - name: Build application darwin amd64
+        env:
+          GOOS: darwin
+          GOARCH: amd64
+        run: |
+          go build  -o todo_darwin_amd64 src/main.go src/todo.go src/storage.go src/command.go
+      
+      - name: Upload binary file linux arm64
         uses: actions/upload-artifact@v3
         with:
-          name: todo
-          path: ./todo
+          name: todo_arm64
+          path: ./todo_arm64
+      
+      - name: Upload binary file linux amd64
+        uses: actions/upload-artifact@v3
+        with:
+          name: todo_amd64
+          path: ./todo_amd64
+      
+      - name: Upload binary file darwin amd64
+        uses: actions/upload-artifact@v3
+        with:
+          name: todo_darwin_amd64
+          path: ./todo_darwin_amd64
   
   release:
     name: Release project
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Download artifact
+      - name: Download artefact linux arm64
         uses: actions/download-artifact@v3
         with:
-          name: todo
+          name: todo_arm64
       
-      - name: Archive site content
+      - name: Download artefact linux amd64
+        uses: actions/download-artifact@v3
+        with:
+          name: todo_amd64
+      
+      - name: Download artefact darwin amd64
+        uses: actions/download-artifact@v3
+        with:
+          name: todo_darwin_amd64
+      
+      - name: Archive linux arm64 content
         uses: thedoctor0/zip-release@master
         with:
-          filename: todo
+          filename: todo_arm64
+      
+      - name: Archive linux arm64 content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: todo_amd64
+      
+      - name: Archive darwin amd64 content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: todo_darwin_amd64
 
       - name: Create release
         id: create_release
@@ -57,12 +103,32 @@ jobs:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number}}
       
-      - name: Upload release asset
+      - name: Upload release asset linux arm64
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./todo.zip
-          asset_name: todo.zip
+          asset_path: ./todo_arm64.zip
+          asset_name: todo_arm64.zip
+          asset_content_type: application/zip
+      
+      - name: Upload release asset linux amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./todo_amd64.zip
+          asset_name: todo_amd64.zip
+          asset_content_type: application/zip
+
+      - name: Upload release asset darwin amd64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./todo_darwin_amd64.zip
+          asset_name: todo_darwin_amd64.zip
           asset_content_type: application/zip
