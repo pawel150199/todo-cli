@@ -1,4 +1,3 @@
----
 name: Build binary of todo app
 
 on:
@@ -25,21 +24,21 @@ jobs:
           GOOS: linux
           GOARCH: arm64
         run: |
-          go build  -o todo_arm64 src/main.go src/todo.go src/storage.go src/command.go
+          go build -o todo_arm64 src/main.go src/todo.go src/storage.go src/command.go
       
       - name: Build application linux amd64
         env:
           GOOS: linux
           GOARCH: amd64
         run: |
-          go build  -o todo_amd64 src/main.go src/todo.go src/storage.go src/command.go
+          go build -o todo_amd64 src/main.go src/todo.go src/storage.go src/command.go
       
       - name: Build application darwin amd64
         env:
           GOOS: darwin
           GOARCH: amd64
         run: |
-          go build  -o todo_darwin_amd64 src/main.go src/todo.go src/storage.go src/command.go
+          go build -o todo_darwin_amd64 src/main.go src/todo.go src/storage.go src/command.go
       
       - name: Upload binary file linux arm64
         uses: actions/upload-artifact@v3
@@ -80,19 +79,16 @@ jobs:
           name: todo_darwin_amd64
       
       - name: Archive linux arm64 content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: todo_arm64
+        run: |
+          zip todo_arm64.zip todo_arm64
       
-      - name: Archive linux arm64 content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: todo_amd64
+      - name: Archive linux amd64 content
+        run: |
+          zip todo_amd64.zip todo_amd64
       
       - name: Archive darwin amd64 content
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: todo_darwin_amd64
+        run: |
+          zip todo_darwin_amd64.zip todo_darwin_amd64
 
       - name: Create release
         id: create_release
@@ -101,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number}}
+          release_name: Release ${{ github.run_number }}
       
       - name: Upload release asset linux arm64
         uses: actions/upload-release-asset@v1
