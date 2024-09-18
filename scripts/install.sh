@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ARCH=$1 #arm64, amd64, darwin_amd64
+URL="https://github.com/pawel150199/todo-cli/releases/download/21/todo_${ARCH}.zip"
 
 info() {
     echo "[$(date)][INFO] $@"
@@ -19,17 +20,13 @@ if [ $# != "1" ];then
     error "Not enough parameters. Please add ARCH variable as a parameter"
 fi
 
-URL="https://github.com/pawel150199/todo-cli/releases/download/20/todo_${ARCH}.zip"
-
 mkdir -p /tmp/todo
 cd /tmp/todo || exit 1
-curl -L  -O ${URL}
+curl -Ls  -O ${URL}
 unzip todo_${ARCH}.zip
-
+mv ./todo_${ARCH} ./todo
 ls -latrh 
+cp ./todo /usr/local/bin/todo
+chmod 755 /usr/local/bin/todo
 
-
-mv todo_${ARCH} /bin/todo
-chmod 755 /bin/todo
-
-rm -rf /tmp/todo
+rm -rf /tmp/todo /tmp/todo_${ARCH}.zip
