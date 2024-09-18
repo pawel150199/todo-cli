@@ -3,7 +3,7 @@
 This application was created for learning go purpose and can ce used as a simple tool for guys who love do everything in cli.
 
 ## Installation
-In case of installation you can copy the repository and use the `script/install.sh` script.\
+In case of installation you can copy the repository and use the `script/install.sh` script.
 
 *Example*
 ```bash
