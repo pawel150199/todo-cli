@@ -78,5 +78,6 @@ func (cf *CmdFlags) Execute(todos *Todos) {
 
 	default:
 		fmt.Println("Invalid command!")
+		os.Exit(1)
 	}
 }
